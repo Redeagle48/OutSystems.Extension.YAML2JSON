@@ -1,0 +1,1 @@
+# OutSystems.Extension.YAML2JSON
