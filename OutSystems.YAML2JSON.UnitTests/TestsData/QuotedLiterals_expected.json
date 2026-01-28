@@ -1,0 +1,33 @@
+﻿{
+  "serviceCategories": [
+    {
+      "id": "arm_dados_folder",
+      "name": "Armazenamento de Dados",
+      "isFolder": true,
+      "myNumber": 1,
+      "myDecimalNumber": 1.1,
+      "myNegativeNumber": -2,
+      "myNegativeDecimalNumber": -2.1
+    },
+    {
+      "id": "dbCategory",
+      "name": "Base de Dados",
+      "description": "Todos os tipos de Base de Dados",
+      "folderId": "arm_dados_folder",
+      "serviceSpecificationIds": [ "oracleDB", "sqlServerDB", "oracleRAC", "mySqlDB" ]
+    },
+    {
+      "id": "storageCategory",
+      "name": "STaaS",
+      "description": "Todos os tipos de Armazenamento de Dados",
+      "folderId": "arm_dados_folder",
+      "serviceSpecificationIds": [ "storageOnPremSpec", "storageS3Spec", "storageGCPSpec" ]
+    },
+    {
+      "id": "computationCategory",
+      "name": "Serviços de Computação",
+      "description": "Servidores, Clusters, etc.",
+      "serviceSpecificationIds": [ "VMSpec", "ClusterSpec" ]
+    }
+  ]
+}

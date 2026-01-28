@@ -1,0 +1,11 @@
+serviceCategories:     
+   - id: "newtorkCategory"
+    name: "Serviços de Conectividade"
+    description: "Serviços relativos a conectividades de rede"
+    isRed: true
+  - id: "securityCategory"
+    name: "Serviços de Segurança"
+    description: "Serviços relativos a Segurança"
+  - id: "computationCategory"
+    name: "Serviços de Computação"
+    description: "Servidores, Clusters, etc."
