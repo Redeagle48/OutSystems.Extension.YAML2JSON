@@ -1,0 +1,68 @@
+name: CI - Run Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: 
+
+# --- DEFINED HERE FOR REUSABILITY ---
+env:
+  PROJECT_NAME: OutSystems.YAML2JSON
+  PRODUCT_NAME: YAML2JSON
+# ------------------------------------
+
+jobs:
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      # Uses the variable to build the path
+      run: dotnet restore ${{ env.PROJECT_NAME }}.UnitTests/${{ env.PROJECT_NAME }}.UnitTests.csproj
+
+    - name: Run Tests
+      # Uses the variable in the test command
+      run: |
+        dotnet test ${{ env.PROJECT_NAME }}.UnitTests/${{ env.PROJECT_NAME }}.UnitTests.csproj \
+        --configuration Release \
+        --no-restore \
+        --nologo \
+        --collect:"XPlat Code Coverage" \
+        --results-directory ./coverage
+
+    - name: Report Code Coverage
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: coverage/**/coverage.cobertura.xml
+        badge: true
+        fail_below_min: false
+        format: markdown
+        output: both
+
+    - name: Write Summary
+      run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
+      with: 
+        token: ${{ secrets.CODECOV_TOKEN }} 
+        directory: ./coverage
+        fail_ci_if_error: true
+        # OPTION A: If your Repo name matches the Codecov slug exactly, 
+        # you can often remove 'slug' entirely or use:
+        # slug: ${{ github.repository }}
+        
+        # OPTION B: If the slug is different, you can construct it:
+        # (Assuming your repos are always named OutSystems.Extension.Name)
+        slug: Redeagle48/OutSystems.Extension.${{ env.PROJECT_NAME }}

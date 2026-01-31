@@ -5,6 +5,12 @@ on:
     tags:
       - 'v*' # Triggers on v1.0, v2.1.5, etc.
 
+# --- DEFINED HERE FOR REUSABILITY ---
+env:
+  PROJECT_NAME: OutSystems.YAML2JSON
+  PRODUCT_NAME: YAML2JSON
+# ------------------------------------
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -26,18 +32,18 @@ jobs:
 
     - name: Publish App
       # We publish to a local 'publish' folder
-      run: dotnet publish OutSystems.YAML2JSON/OutSystems.YAML2JSON.csproj -c Release -r linux-x64 --self-contained false -o ./publish
+      run: dotnet publish ${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj -c Release -r linux-x64 --self-contained false -o ./publish
 
     - name: Create Versioned Zip
       run: |
         cd ./publish
-        zip -r ../YAML2JSON_${{ steps.get_version.outputs.VERSION }}.zip .
+        zip -r ../${{ env.PRODUCT_NAME }}_${{ steps.get_version.outputs.VERSION }}.zip .
         cd ..
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        files: YAML2JSON_${{ steps.get_version.outputs.VERSION }}.zip
+        files: ${{ env.PRODUCT_NAME }}_${{ steps.get_version.outputs.VERSION }}.zip
         name: Release ${{ steps.get_version.outputs.VERSION }}
         draft: false
         prerelease: false
